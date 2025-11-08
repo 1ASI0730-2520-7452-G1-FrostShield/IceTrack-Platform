@@ -1,0 +1,6 @@
+@IceTrackPlatform.API_HostAddress = http://localhost:5099
+
+GET {{IceTrackPlatform.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
