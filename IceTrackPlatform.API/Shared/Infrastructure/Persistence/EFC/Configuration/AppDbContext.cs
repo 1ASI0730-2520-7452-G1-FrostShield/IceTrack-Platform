@@ -1,3 +1,4 @@
+using IceTrackPlatform.API.Reporting.Domain.Model.Aggregates;
 using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
 
 namespace IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
@@ -46,6 +47,14 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // IAM Context
         // Apply IAM configuration when available
         // builder.ApplyIAMConfiguration();
+        
+        // Create all entities configurations
+        
+        builder.Entity<Report>().HasKey(r => r.Id);
+        builder.Entity<Report>().Property(r => r.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Report>().Property(r => r.TenantId).IsRequired();
+        builder.Entity<Report>().Property(r => r.EquipmentId).IsRequired();
+        builder.Entity<Report>().Property(r => r.Status).HasConversion<string>().IsRequired();
         
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();
