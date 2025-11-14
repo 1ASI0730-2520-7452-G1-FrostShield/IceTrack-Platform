@@ -3,18 +3,17 @@ using Cortex.Mediator.DependencyInjection;
 
 namespace IceTrackPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration.Extensions;
 
-
 public static class WebApplicationBuilderExtensions
 {
-    public static void AddCortexMediatorServices(this WebApplicationBuilder builder)
+    public static void AddCortexConfigurationServices(this WebApplicationBuilder builder)
     {
         // Add Mediator Injection Configuration
         builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
 
         // Add Cortex Mediator for Event Handling
         builder.Services.AddCortexMediator(
-            configuration: builder.Configuration,
-            handlerAssemblyMarkerTypes: [typeof(Program)], configure: options =>
+            builder.Configuration,
+            [typeof(Program)], options =>
             {
                 options.AddOpenCommandPipelineBehavior(typeof(LoggingCommandBehavior<>));
                 //options.AddDefaultBehaviors();

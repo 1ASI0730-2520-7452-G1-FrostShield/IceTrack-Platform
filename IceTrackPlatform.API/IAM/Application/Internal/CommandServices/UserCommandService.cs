@@ -1,12 +1,11 @@
-﻿namespace IceTrackPlatform.API.IAM.Application.Internal.CommandServices;
-
-using IceTrackPlatform.API.IAM.Application.Internal.OutboundServices;
+﻿using IceTrackPlatform.API.IAM.Application.Internal.OutboundServices;
 using IceTrackPlatform.API.IAM.Domain.Model.Aggregates;
 using IceTrackPlatform.API.IAM.Domain.Model.Commands;
 using IceTrackPlatform.API.IAM.Domain.Repositories;
 using IceTrackPlatform.API.IAM.Domain.Services;
 using IceTrackPlatform.API.Shared.Domain.Repositories;
 
+namespace IceTrackPlatform.API.IAM.Application.Internal.CommandServices;
 
 /// <summary>
 ///     Handles user-related commands such as sign-in and sign-up.

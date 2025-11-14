@@ -1,6 +1,7 @@
+using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
+namespace IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 
 /// <summary>
 ///     Model builder extensions for the database context
