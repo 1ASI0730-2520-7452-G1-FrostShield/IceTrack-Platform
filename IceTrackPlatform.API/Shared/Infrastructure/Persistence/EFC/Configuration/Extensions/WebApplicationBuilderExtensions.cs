@@ -4,9 +4,10 @@ namespace IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configurati
 
 public static class WebApplicationBuilderExtensions
 {
-    public static void AddDatabaseConfigurationServices(this WebApplicationBuilder builder)
+    public static void AddDatabaseServices(this WebApplicationBuilder builder)
     {
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
         if (connectionString == null) throw new InvalidOperationException("Connection string not found.");
 
         builder.Services.AddDbContext<AppDbContext>(options =>
