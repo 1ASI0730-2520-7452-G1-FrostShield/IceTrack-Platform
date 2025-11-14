@@ -1,4 +1,5 @@
 using IceTrackPlatform.API.IAM.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
 using IceTrackPlatform.API.Reporting.Domain.Model.Aggregates;
 using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
 
@@ -56,6 +57,16 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Report>().Property(r => r.TenantId).IsRequired();
         builder.Entity<Report>().Property(r => r.EquipmentId).IsRequired();
         builder.Entity<Report>().Property(r => r.Status).HasConversion<string>().IsRequired();
+        
+        builder.Entity<Alert>().HasKey(a => a.Id);
+        builder.Entity<Alert>().Property(a => a.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Alert>().Property(a => a.TenantId).IsRequired();
+        builder.Entity<Alert>().Property(a => a.EquipmentId).IsRequired();
+        builder.Entity<Alert>().Property(a => a.SiteId).IsRequired();
+        builder.Entity<Alert>().Property(a => a.Type).IsRequired();
+        builder.Entity<Alert>().Property(a => a.Date).IsRequired();
+        builder.Entity<Alert>().Property(a => a.Status).HasConversion<string>().IsRequired();
+        builder.Entity<Alert>().Property(a => a.Severity).HasConversion<string>().IsRequired();
         
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();
