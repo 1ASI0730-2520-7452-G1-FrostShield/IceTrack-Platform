@@ -62,9 +62,9 @@ public class AlertController(
     }
 
     [HttpGet("{id}")]
-    [SwaggerOperation(Summary = "Gets an Alert by Id",
+    [SwaggerOperation(Summary = "Gets all Alerts By Id",
                       Description = "Gets an Alert for a given identifier",
-                      OperationId = "GetAlertById")]
+                      OperationId = "GetAlertsById")]
     [SwaggerResponse(200, "The Alert was found", typeof(AlertResource))]
     public async Task<IActionResult> GetAlertById(int id)
     {
@@ -78,6 +78,10 @@ public class AlertController(
     }
 
     [HttpGet]
+    [SwaggerOperation(Summary = "Gets all Alerts by TenantId and EquipmentId",
+        Description = "Gets all Alerts by TenantId and EquipmentId",
+        OperationId = "GetAllAlertsByTenantIdAndEquipmentId")]
+    [SwaggerResponse(200, "The Alert was found", typeof(AlertResource))]
     public async Task<IActionResult> GetAlertsFromQuery(
         [FromQuery] int? tenantId = null,
         [FromQuery] int? equipmentId = null)
