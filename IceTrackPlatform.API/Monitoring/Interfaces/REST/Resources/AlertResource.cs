@@ -1,4 +1,4 @@
-﻿using IceTrackPlatform.API.Monitoring.Domain.Model.ValueObjects;
+using IceTrackPlatform.API.Monitoring.Domain.Model.ValueObjects;
 
 namespace IceTrackPlatform.API.Monitoring.Interfaces.REST.Resources;
 
@@ -13,6 +13,5 @@ public record AlertResource(
     string Type,
     EAlertSeverity Severity,
     string Description,
-    DateTime Date,
     EAlertStatus Status
 );
