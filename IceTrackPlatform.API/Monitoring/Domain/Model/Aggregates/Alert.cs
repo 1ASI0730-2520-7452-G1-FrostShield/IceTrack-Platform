@@ -1,4 +1,3 @@
-﻿
 using IceTrackPlatform.API.Monitoring.Domain.Model.Commands;
 using IceTrackPlatform.API.Monitoring.Domain.Model.ValueObjects;
 
@@ -18,9 +17,7 @@ public partial class Alert
     public EAlertSeverity Severity { get; private set; }
     
     public string Description { get; private set; }
-
-    public DateTime Date { get; private set; }
-
+    
     public EAlertStatus Status { get; private set; }
     
     public Alert(
@@ -30,7 +27,6 @@ public partial class Alert
         string type,
         EAlertSeverity severity,
         string description,
-        DateTime date,
         EAlertStatus status)
     {
         TenantId = tenantId;
@@ -39,7 +35,6 @@ public partial class Alert
         Type = type;
         Severity = severity;
         Description = description;
-        Date = date;
         Status = status;
     }
     
@@ -51,7 +46,6 @@ public partial class Alert
         Type = command.Type;
         Severity = command.Severity;
         Description = command.Description;
-        Date = DateTime.UtcNow;
         Status = EAlertStatus.Active;
     }
     
