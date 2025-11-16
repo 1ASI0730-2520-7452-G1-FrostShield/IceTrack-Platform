@@ -16,7 +16,6 @@ public static class CreateAlertCommandFromResourceAssembler
             resource.Type,
             resource.Severity,
             resource.Description,
-            resource.Date,
             resource.Status
         );
 }
