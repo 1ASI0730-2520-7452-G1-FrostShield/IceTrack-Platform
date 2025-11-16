@@ -3,6 +3,11 @@ using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using IceTrackPlatform.API.IAM.Infrastructure.Interfaces.ASP.Configuration.Extensions;
 using IceTrackPlatform.API.IAM.Infrastructure.Pipeline.Middleware.Extensions;
+using IceTrackPlatform.API.Monitoring.Application.Internal.CommandServices;
+using IceTrackPlatform.API.Monitoring.Application.Internal.QueryServices;
+using IceTrackPlatform.API.Monitoring.Domain.Repositories;
+using IceTrackPlatform.API.Monitoring.Domain.Services;
+using IceTrackPlatform.API.Monitoring.Infrastructure.Persistence.EFC.Configuration.Repositories;
 using IceTrackPlatform.API.Reporting.Application.Internal.CommandServices;
 using IceTrackPlatform.API.Reporting.Application.Internal.QueryServices;
 using IceTrackPlatform.API.Reporting.Domain.Repositories;
@@ -42,10 +47,16 @@ builder.AddOpenApiDocumentationServices();
 
 builder.AddSharedContextServices();
 
-// News Bounded Context Injections
+// Report Bounded Context Injections
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportQueryServices, ReportQueryService>();
 builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
+
+
+// Alerts Bounded Context Injections
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<IAlertQueryServices, AlertQueryService>();
+builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
 
 builder.AddIamContextServices();
 
