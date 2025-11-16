@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
+using IceTrackPlatform.API.Dashboard.Infrastructure.Interfaces.ASP.Configuration.Extensions;
 using IceTrackPlatform.API.IAM.Infrastructure.Interfaces.ASP.Configuration.Extensions;
 using IceTrackPlatform.API.IAM.Infrastructure.Pipeline.Middleware.Extensions;
 using IceTrackPlatform.API.Monitoring.Application.Internal.CommandServices;
@@ -59,6 +60,7 @@ builder.Services.AddScoped<IAlertQueryServices, AlertQueryService>();
 builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
 
 builder.AddIamContextServices();
+builder.AddDashboardContextServices();
 
 // Mediator Configuration
 builder.AddCortexConfigurationServices();

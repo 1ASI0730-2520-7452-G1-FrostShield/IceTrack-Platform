@@ -1,3 +1,4 @@
+using IceTrackPlatform.API.Dashboard.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.IAM.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
 using IceTrackPlatform.API.Reporting.Domain.Model.Aggregates;
@@ -49,6 +50,10 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // IAM Context
         // IAM Context
         builder.ApplyIamConfiguration();
+        
+        // DASHBOARD Context
+        builder.ApplyDashboardConfiguration();
+
         
         // Create all entities configurations
         
