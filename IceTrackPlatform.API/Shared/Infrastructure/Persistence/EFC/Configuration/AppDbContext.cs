@@ -69,7 +69,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Alert>().Property(a => a.EquipmentId).IsRequired();
         builder.Entity<Alert>().Property(a => a.SiteId).IsRequired();
         builder.Entity<Alert>().Property(a => a.Type).IsRequired();
-        builder.Entity<Alert>().Property(a => a.Date).IsRequired();
         builder.Entity<Alert>().Property(a => a.Status).HasConversion<string>().IsRequired();
         builder.Entity<Alert>().Property(a => a.Severity).HasConversion<string>().IsRequired();
         
