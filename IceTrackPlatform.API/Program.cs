@@ -68,6 +68,9 @@ builder.AddCortexConfigurationServices();
 //Render configs
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.WebHost.ConfigureKestrel(opt =>
 {
     opt.ListenAnyIP(int.Parse(port));
