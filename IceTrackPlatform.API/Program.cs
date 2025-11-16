@@ -65,6 +65,14 @@ builder.AddDashboardContextServices();
 // Mediator Configuration
 builder.AddCortexConfigurationServices();
 
+//Render configs
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+
+builder.WebHost.ConfigureKestrel(opt =>
+{
+    opt.ListenAnyIP(int.Parse(port));
+});
+
 var app = builder.Build();
 
 // Verify if the database exists and create it if it doesn't
