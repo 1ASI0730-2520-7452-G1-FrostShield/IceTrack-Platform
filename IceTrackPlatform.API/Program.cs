@@ -90,6 +90,6 @@ app.UseHttpsRedirection();
 // ------------------------------------
 
 app.UseAuthorization();
-app.UseRequestAuthorization();
+// app.UseRequestAuthorization();
 app.MapControllers();
 app.Run();
