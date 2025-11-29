@@ -9,6 +9,6 @@ namespace IceTrackPlatform.API.Reporting.Interfaces.REST.Transform;
 public static class ReportResourceFromEntityAssembler
 {
     public static ReportResource ToResourceFromEntity(Report entity) =>
-        new ReportResource(entity.Id, entity.TenantId, entity.Type, entity.EquipmentId,
+        new ReportResource(entity.Id, entity.TenantId, entity.Type.ToString(), entity.EquipmentId,
             entity.Title, entity.Status.ToString(), entity.Summary, entity.Content, entity.Url);
 }

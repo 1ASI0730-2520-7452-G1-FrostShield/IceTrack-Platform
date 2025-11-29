@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using IceTrackPlatform.API.Reporting.Domain.Model.Commands;
 using IceTrackPlatform.API.Reporting.Domain.Model.Queries;
 using IceTrackPlatform.API.Reporting.Domain.Services;
 using IceTrackPlatform.API.Reporting.Interfaces.REST.Resources;
@@ -98,5 +99,51 @@ public class ReportController(
             .ToList();
 
         return Ok(resources);
+    }
+    
+    [HttpGet("all")]
+    [SwaggerOperation(Summary = "Gets all reports", Description = "Get all reports", OperationId = "GetAllReports")]
+    [SwaggerResponse(200, "The reports were found", typeof(IEnumerable<ReportResource>))]
+    public async Task<IActionResult> GetAllReports()
+    {
+        var getAllReportsQuery = new GetAllReportsQuery();
+        var reports = await reportQueryServices.Handle(getAllReportsQuery);
+
+        var resources = reports .Select(ReportResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(resources);
+    }
+    
+    [HttpPut("{id}")]
+    [SwaggerOperation(Summary = "Update a report", Description = "Update a report", OperationId = "UpdateReport")]
+    [SwaggerResponse(200, "Updated report", typeof(ReportResource))]
+    [SwaggerResponse(400, "Invalid request")]
+    [SwaggerResponse(404, "Report not found")]
+    public async Task<IActionResult> UpdateReport(int id, [FromBody] UpdateReportResource resource)
+    {
+        if (resource is null) return BadRequest();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+        }
+
+        var updateCommand = UpdateReportCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+
+
+        var result = await reportCommandService.Handle(updateCommand);
+        if (result is null) return NotFound();
+        var updatedResource = ReportResourceFromEntityAssembler.ToResourceFromEntity(result);
+        return Ok(updatedResource);
+    }
+    
+    [HttpDelete("{id}")]
+    [SwaggerOperation(Summary = "Delete a report", Description = "Delete a report", OperationId = "DeleteReport")]
+    [SwaggerResponse(204, "Report deleted")]
+    [SwaggerResponse(404, "Report not found")]
+    public async Task<IActionResult> DeleteReport(int id)
+    {
+        var deleteCommand = new DeleteReportCommand(id);
+        var result = await reportCommandService.Handle(deleteCommand);
+        if (result is null) return NotFound();
+        return NoContent();
     }
 }

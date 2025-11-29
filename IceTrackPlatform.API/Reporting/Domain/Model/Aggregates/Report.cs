@@ -9,13 +9,13 @@ public partial class Report
     
     public int TenantId { get; private set; }
     
-    public string Type { get; private set; }
+    public EReportType Type { get; private set; }
     
     public int EquipmentId { get; private set; }
     
     public string Title { get; private set; }
     
-    public EReportType Status { get; private set; }
+    public EReportStatus Status { get; private set; }
     
     public string Summary { get; private set; }
     
@@ -23,8 +23,8 @@ public partial class Report
     
     public string Url { get; private set; }
     
-    public Report(int tenantId, string type, int equipmentId, string title,
-        EReportType status,  string summary, string content, string url)
+    public Report(int tenantId, EReportType type, int equipmentId, string title,
+        EReportStatus status,  string summary, string content, string url)
     {
         TenantId = tenantId;
         Type = type;
@@ -46,9 +46,24 @@ public partial class Report
         Type = command.Type;
         EquipmentId = command.EquipmentId;
         Title = command.Title;
-        Status = EReportType.InProgress;
+        Status = EReportStatus.InProgress;
         Summary = command.Summary;
         Content = command.Content;
         Url = command.Url;
+    }
+    
+    /// <summary>
+    /// Updates the information of a Report
+    /// </summary>
+    public void UpdateReport(int tenantId, int equipmentId, string title, EReportStatus status,
+        string summary, string content, string url)
+    {
+        TenantId = tenantId;
+        EquipmentId = equipmentId;
+        Title = title;
+        Status = status;
+        Summary = summary;
+        Content = content;
+        Url = url;
     }
 }
