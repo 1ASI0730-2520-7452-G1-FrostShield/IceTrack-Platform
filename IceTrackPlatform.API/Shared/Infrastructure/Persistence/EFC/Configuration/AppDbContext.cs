@@ -53,6 +53,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Report>().HasKey(r => r.Id);
         builder.Entity<Report>().Property(r => r.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Report>().Property(r => r.TenantId).IsRequired();
+        builder.Entity<Report>().Property(r => r.Type).HasConversion<string>();
         builder.Entity<Report>().Property(r => r.EquipmentId).IsRequired();
         builder.Entity<Report>().Property(r => r.Status).HasConversion<string>().IsRequired();
         
