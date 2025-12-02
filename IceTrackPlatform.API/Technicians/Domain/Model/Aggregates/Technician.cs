@@ -2,7 +2,6 @@
 
 using IceTrackPlatform.API.Technicians.Domain.Model.ValueObjects;
 
-
 public partial class Technician
 {
     public int Id { get; }

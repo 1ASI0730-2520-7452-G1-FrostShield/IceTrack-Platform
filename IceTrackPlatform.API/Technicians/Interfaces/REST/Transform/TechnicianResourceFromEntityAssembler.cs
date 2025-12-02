@@ -3,7 +3,6 @@ using IceTrackPlatform.API.Technicians.Interfaces.REST.Resources;
 
 namespace IceTrackPlatform.API.Technicians.Interfaces.REST.Transform;
 
-
 public static class TechnicianResourceFromEntityAssembler
 {
     public static TechnicianResource ToResourceFromEntity(Technician entity)
@@ -13,6 +12,7 @@ public static class TechnicianResourceFromEntityAssembler
             entity.Name,
             entity.Specialty,
             entity.Phone,
-            entity.ProviderId.Id);
+            entity.ProviderId.Value);
     }
 }
+

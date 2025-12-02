@@ -11,7 +11,7 @@ public class TechnicianRepository(AppDbContext context) : BaseRepository<Technic
 {
     public async Task<IEnumerable<Technician>> FindByProviderIdAsync(int providerId)
     {
-        return await Context.Set<Technician>().Where(t => t.ProviderId.Id == providerId).ToListAsync();
+        return await Context.Set<Technician>().Where(t => t.ProviderId.Value == providerId).ToListAsync(); // Changed from t.ProviderId.Id to t.ProviderId.Value
     }
 
     public new async Task<IEnumerable<Technician>> ListAsync()
@@ -19,3 +19,4 @@ public class TechnicianRepository(AppDbContext context) : BaseRepository<Technic
         return await Context.Set<Technician>().ToListAsync();
     }
 }
+

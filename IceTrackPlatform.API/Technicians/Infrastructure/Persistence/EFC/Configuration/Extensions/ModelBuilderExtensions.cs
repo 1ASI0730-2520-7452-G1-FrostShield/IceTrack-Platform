@@ -17,7 +17,7 @@ public static class ModelBuilderExtensions
         builder.Entity<Technician>()
             .OwnsOne(t => t.ProviderId, p =>
             {
-                p.Property(id => id.Id).HasColumnName("ProviderId").IsRequired();
+                p.Property(id => id.Value).HasColumnName("ProviderId").IsRequired();
             });
     }
 }
