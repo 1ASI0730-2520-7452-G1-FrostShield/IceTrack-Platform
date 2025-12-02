@@ -1,4 +1,5 @@
 ﻿using IceTrackPlatform.API.IAM.Domain.Model.Aggregates;
+using IceTrackPlatform.API.IAM.Domain.Model.ValueObjects;
 using IceTrackPlatform.API.IAM.Domain.Repositories;
 using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
@@ -32,5 +33,10 @@ public class UserRepository(AppDbContext context) : BaseRepository<User>(context
     public bool ExistsByUsername(string username)
     {
         return Context.Set<User>().Any(user => user.Username.Equals(username));
+    }
+    
+    public async Task<IEnumerable<User>> FindByRoleAsync(Roles role)
+    {
+        return await Context.Set<User>().Where(user => user.Role == role).ToListAsync();
     }
 }

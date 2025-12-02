@@ -1,10 +1,12 @@
 ﻿using System.Net.Mime;
 using IceTrackPlatform.API.IAM.Domain.Model.Queries;
+using IceTrackPlatform.API.IAM.Domain.Model.ValueObjects;
 using IceTrackPlatform.API.IAM.Domain.Services;
 using IceTrackPlatform.API.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 using IceTrackPlatform.API.IAM.Interfaces.REST.Resources;
 using IceTrackPlatform.API.IAM.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Cms;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace IceTrackPlatform.API.IAM.Interfaces.REST;
@@ -15,7 +17,7 @@ namespace IceTrackPlatform.API.IAM.Interfaces.REST;
 /// <remarks>
 ///     Routes are rooted at <c>api/v1/users</c>. Endpoints require authorization unless marked with
 ///     <see
-///         cref="ACME.LearningCenterPlatform.API.IAM.Infrastructure.Pipeline.Middleware.Attributes.AllowAnonymousAttribute" />
+///         cref="Attributes.AllowAnonymousAttribute" />
 ///     .
 /// </remarks>
 [Authorize]
@@ -58,6 +60,29 @@ public class UsersController(IUserQueryService userQueryService) : ControllerBas
     {
         var getAllUsersQuery = new GetAllUsersQuery();
         var users = await userQueryService.Handle(getAllUsersQuery);
+        var userResources = users.Select(UserResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(userResources);
+    }
+    
+    /// <summary>
+    ///     Get users by role.
+    /// </summary>
+    /// <param name="role">The role to filter users by.</param>
+    /// <returns>Returns an <see cref="IActionResult" /> that contains a collection of <see cref="UserResource" /> objects.</returns>
+    [HttpGet("role/{role}")]
+    [SwaggerOperation(
+        Summary = "Get users by role",
+        Description = "Get users by role",
+        OperationId = "GetUsersByRole")]
+    [SwaggerResponse(StatusCodes.Status200OK, "The users were found", typeof(IEnumerable<UserResource>))]
+    public async Task<IActionResult> GetUsersByRole(string role)
+    {
+        if (!Enum.TryParse<Roles>(role, true, out var userRole))
+        {
+            return BadRequest($"Invalid role: {role}");
+        }
+        var getUserByRoleQuery = new GetUserByRoleQuery(userRole);
+        var users = await userQueryService.Handle(getUserByRoleQuery);
         var userResources = users.Select(UserResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(userResources);
     }
