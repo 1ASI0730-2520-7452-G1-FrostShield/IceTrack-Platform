@@ -1,8 +1,11 @@
 using IceTrackPlatform.API.Dashboard.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using IceTrackPlatform.API.Feedback.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.IAM.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
 using IceTrackPlatform.API.Reporting.Domain.Model.Aggregates;
+using IceTrackPlatform.API.ServiceRequests.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using IceTrackPlatform.API.Technicians.Infrastructure.Persistence.EFC.Configuration.Extensions;
 
 namespace IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 
@@ -28,6 +31,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
    /// <param name="builder">
    ///     The option builder for the database context
    /// </param>
+   /// 
    protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
         builder.AddCreatedUpdatedInterceptor();
@@ -43,6 +47,8 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
    /// <param name="builder">
    ///     The model builder for the database context
    /// </param>
+   ///
+   
    protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -72,6 +78,14 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Alert>().Property(a => a.Status).HasConversion<string>().IsRequired();
         builder.Entity<Alert>().Property(a => a.Severity).HasConversion<string>().IsRequired();
         
+        // ServiceRequests Context
+        builder.ApplyServiceRequestsConfiguration();
+
+        // Technicians Context
+        builder.ApplyTechniciansConfiguration();
+        
+        // Feedback Context
+        builder.ApplyFeedbackConfiguration();
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();
     }
