@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using IceTrackPlatform.API.Monitoring.Domain.Model.Commands;
 using IceTrackPlatform.API.Monitoring.Domain.Services;
 using IceTrackPlatform.API.Monitoring.Interfaces.REST.Resources;
 using IceTrackPlatform.API.Monitoring.Interfaces.REST.Transform;
@@ -117,5 +118,31 @@ public class AlertController(
             .ToList();
 
         return Ok(resources);
+    }
+    [HttpDelete("{id}")]
+    [SwaggerOperation(
+        Summary = "Acknowledge an Alert",
+        Description = "Marks an alert as acknowledged instead of deleting it",
+        OperationId = "AcknowledgeAlert")]
+    [SwaggerResponse(200, "Alert acknowledged successfully", typeof(AlertResource))]
+    [SwaggerResponse(404, "Alert not found")]
+    [SwaggerResponse(500, "Internal server error")]
+    public async Task<IActionResult> AcknowledgeAlert(int id)
+    {
+        try
+        {
+            var command = new AcknowledgeAlertCommand(id);
+            var result = await alertCommandService.Handle(command);
+
+            if (result is null)
+                return NotFound($"Alert with id {id} was not found.");
+
+            var resource = AlertResourceFromEntityAssembler.ToResourceFromEntity(result);
+            return Ok(resource);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 }

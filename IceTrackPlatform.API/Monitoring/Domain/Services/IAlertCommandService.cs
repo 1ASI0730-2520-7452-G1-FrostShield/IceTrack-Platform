@@ -18,4 +18,10 @@ public interface IAlertCommandService
     /// A newly created Alert if successful; otherwise, null.
     /// </returns>
     Task<Alert?> Handle(CreateAlertCommand command);
+    /// <summary>
+    /// Handle the acknowledge alert command
+    /// </summary>
+    /// <param name="command">The acknowledge alert command</param>
+    /// <returns>The acknowledged alert if found; otherwise, null.</returns>
+    Task<Alert?> Handle(AcknowledgeAlertCommand command);
 }
