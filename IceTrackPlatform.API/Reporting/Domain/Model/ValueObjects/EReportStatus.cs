@@ -7,5 +7,5 @@ public enum EReportStatus
 {
     InProgress,
     Completed,
-    Failed
+    Canceled
 }
