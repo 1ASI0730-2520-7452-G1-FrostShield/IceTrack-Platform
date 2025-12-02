@@ -31,4 +31,6 @@ public interface IUserQueryService
     /// <param name="query">The query containing the username to search.</param>
     /// <returns>The <see cref="User" /> when found; otherwise <c>null</c>.</returns>
     Task<User?> Handle(GetUserByUsernameQuery query);
+    Task<IEnumerable<User>> Handle(GetUserByRoleQuery query);
+
 }
