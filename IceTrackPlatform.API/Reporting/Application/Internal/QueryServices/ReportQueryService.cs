@@ -30,4 +30,9 @@ public class ReportQueryService(IReportRepository reportRepository)
     {
         return await reportRepository.FindByIdAsync(query.Id);
     }
+    
+    public async Task<IEnumerable<Report>> Handle(GetAllReportsQuery query)
+    {
+        return await reportRepository.ListAsync();
+    }
 }

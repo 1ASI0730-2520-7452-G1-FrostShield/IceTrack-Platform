@@ -43,4 +43,14 @@ public interface IReportQueryServices
     /// <param name="query"> The GetReportByIdQuery query </param>
     /// <returns> The Report if found; otherwise, null </returns>
     Task<Report?> Handle(GetReportByIdQuery query);
+    
+    /// <summary>
+    /// Handle the GetAllReportsQuery
+    /// </summary>
+    /// <remarks>
+    /// This method handles the GetAllReportsQuery to retrieve all Report entities.
+    /// </remarks>
+    /// <param name="query"> The GetAllReportsQuery query </param>
+    /// <returns> An IEnumerable containing the Report objects </returns>
+    Task<IEnumerable<Report>> Handle(GetAllReportsQuery query);
 }

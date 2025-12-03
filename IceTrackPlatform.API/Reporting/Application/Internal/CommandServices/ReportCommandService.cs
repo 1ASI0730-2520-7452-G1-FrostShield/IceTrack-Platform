@@ -28,4 +28,33 @@ public class ReportCommandService(IReportRepository reportRepository,
 
         return report;
     }
+    
+    public async Task<Report?> Handle(UpdateReportCommand command)
+    {
+        var report = await reportRepository.FindByIdAsync(command.Id);
+
+        if (report == null)
+            throw new Exception("Report not found.");
+        
+        report.UpdateReport(command.TenantId, command.EquipmentId, command.Title, command.Status,
+            command.Summary, command.Content, command.Url);
+
+        reportRepository.Update(report);
+        await unitOfWork.CompleteAsync();
+
+        return report;
+    }
+    
+    public async Task<Report?> Handle(DeleteReportCommand command)
+    {
+        var report = await reportRepository.FindByIdAsync(command.Id);
+
+        if (report == null)
+            throw new Exception("Report not found.");
+
+        reportRepository.Remove(report);
+        await unitOfWork.CompleteAsync();
+
+        return report;
+    }
 }
