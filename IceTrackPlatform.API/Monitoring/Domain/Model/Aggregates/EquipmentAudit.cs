@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using EntityFrameworkCore.CreatedUpdatedDate.Contracts;
 
-namespace IceTrackPlatform.API.Assets_Management.Domain.Model.Aggregates;
+namespace IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
 
-public partial class SiteAudit : IEntityWithCreatedUpdatedDate
+public partial class EquipmentAudit : IEntityWithCreatedUpdatedDate
 {
     [Column("Created")] public DateTimeOffset? CreatedDate { get; set; }
     [Column("Updated")] public DateTimeOffset? UpdatedDate { get; set; }

@@ -9,17 +9,16 @@ namespace IceTrackPlatform.API.Assets_Management.Infrastructure.Persistence.EFC.
 /// <summary>
 ///     Site Repository Implementation
 /// </summary>
-public class SiteRepository(AppDbContext  context)
+/// <remarks>
+///     This class implements the repository pattern for managing Site entities using Entity Framework Core.
+///     It provides methods to perform CRUD operations and custom queries specific to Site.
+/// </remarks>
+/// <param name="context"></param>
+public class SiteRepository(AppDbContext context)
     : BaseRepository<Site>(context), ISiteRepository
 {
-    public async Task<IEnumerable<Site>> FindByNameAsync(string name)
+    public async Task<IEnumerable<Site>> FindByContactNameAsync(string contactName)
     {
-        return await Context.Set<Site>().Where( f => f.Name == name).ToListAsync();
-    }
-
-    public async Task<Site?> FindByNameAndAddressAsync(string name, string address)
-    {
-        return await Context.Set<Site>()
-            .FirstOrDefaultAsync(f => f.Name == name && f.Address == address);
+        return await Context.Set<Site>().Where( f => f.ContactName == contactName).ToListAsync();
     }
 }

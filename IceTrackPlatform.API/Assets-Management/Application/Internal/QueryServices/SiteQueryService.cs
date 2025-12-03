@@ -8,17 +8,17 @@ namespace IceTrackPlatform.API.Assets_Management.Application.Internal.QueryServi
 /// <summary>
 ///     Site Query Service
 /// </summary>
+/// <remarks>
+///     This class handles queries related to favorite news sources.
+///     It interacts with the ISiteQueryServices to retrieve data.
+/// </remarks>
+/// <param name="siteRepository"></param>
 public class SiteQueryService(ISiteRepository siteRepository)
     : ISiteQueryServices
 {
-    public async Task<IEnumerable<Site>> Handle(GetAllSitesByNameQuery query)
+    public async Task<IEnumerable<Site>> Handle(GetAllSitesByContactNameQuery query)
     {
-        return await siteRepository.FindByNameAsync(query.Name);
-    }
-
-    public async Task<Site?> Handle(GetSiteByNameAndAddressQuery query)
-    {
-        return await siteRepository.FindByNameAndAddressAsync(query.Name, query.Address);
+        return await siteRepository.FindByContactNameAsync(query.ContactName);
     }
 
     public async Task<Site?> Handle(GetSiteByIdQuery query)

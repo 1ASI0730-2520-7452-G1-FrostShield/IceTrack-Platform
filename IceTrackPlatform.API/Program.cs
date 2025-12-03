@@ -62,6 +62,16 @@ builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
 builder.AddIamContextServices();
 builder.AddDashboardContextServices();
 
+// Assets Management Bounded Context Injections
+builder.Services.AddScoped<ISiteRepository, SiteRepository>();
+builder.Services.AddScoped<ISiteCommandService, SiteCommandService>();
+builder.Services.AddScoped<ISiteQueryServices, SiteQueryService>();
+
+// Monitoring Bounded Context Injections
+builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+builder.Services.AddScoped<IEquipmentCommandService, EquipmentCommandService>();
+builder.Services.AddScoped<IEquipmentQueryServices, EquipmentQueryService>();
+
 // Mediator Configuration
 builder.AddCortexConfigurationServices();
 

@@ -4,7 +4,7 @@ using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace IceTrackPlatform.API.Monitoring.Infrastructure.Persistence.EFC.Configuration.Repositories;
+namespace IceTrackPlatform.API.Monitoring.Infrastructure.Persistence.EFC.Repositories;
 
 /// <summary>
 /// Alert Repository Implementation

@@ -3,18 +3,14 @@ using IceTrackPlatform.API.Shared.Domain.Repositories;
 
 namespace IceTrackPlatform.API.Assets_Management.Domain.Repositories;
 
-/// <summary>
-///     The Site Repository interface
-/// </summary>
 public interface ISiteRepository : IBaseRepository<Site>
 {
     /// <summary>
-    ///     Find Site by Name
+    ///     Find Site by News API Key
     /// </summary>
-    Task<IEnumerable<Site>> FindByNameAsync(string name);
-    
-    /// <summary>
-    ///     Find Site by Name and Address
-    /// </summary>
-    Task<Site?> FindByNameAndAddressAsync(string name, string address);
+    /// <param name="contactName">The contact name Key</param>
+    /// <returns>
+    ///     Enumerable of Site if found; otherwise, an empty Enumerable
+    /// </returns>
+    Task<IEnumerable<Site>> FindByContactNameAsync(string contactName);
 }

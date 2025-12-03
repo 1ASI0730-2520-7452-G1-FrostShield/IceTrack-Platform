@@ -2,26 +2,42 @@
 
 namespace IceTrackPlatform.API.Assets_Management.Domain.Model.Aggregates;
 
-public partial class Site
+public partial class Site : SiteAudit
 {
     public int Id { get; }
     public string Name { get; private set; }
     public string Address { get; private set; }
-
+    public string ContactName { get; private set; }
+    public string Phone { get; private set; }
+    
     protected Site()
     {
         Name = string.Empty;
         Address = string.Empty;
+        ContactName = string.Empty;
+        Phone = string.Empty;
     }
 
+    protected Site(string name, string address, string contactName, string phone)
+    {
+        Name = name;
+        Address = address;
+        ContactName = contactName;
+        Phone = phone;
+    }
+    
     /// <summary>
     ///   Constructor for Site aggregate
     /// </summary>
     /// <param name="Name"></param>
     /// <param name="Address"></param>
+    /// <param name="ContactName"></param>
+    /// <param name="Phone"></param>
     public Site(CreateSiteCommand command)
     {
         Name = command.Name;
         Address = command.Address;
+        ContactName = command.ContactName;
+        Phone = command.Phone;
     }
 }

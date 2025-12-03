@@ -60,7 +60,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // DASHBOARD Context
         builder.ApplyDashboardConfiguration();
 
-        
         // Create all entities configurations
         
         builder.Entity<Report>().HasKey(r => r.Id);
@@ -78,7 +77,13 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Alert>().Property(a => a.Type).IsRequired();
         builder.Entity<Alert>().Property(a => a.Status).HasConversion<string>().IsRequired();
         builder.Entity<Alert>().Property(a => a.Severity).HasConversion<string>().IsRequired();
+
+        // Assets Management Context
+        builder.ApplyAssetsManagementConfiguration();
         
+        // Monitoring Context
+        builder.ApplyMonitoringConfiguration();
+      
         // ServiceRequests Context
         builder.ApplyServiceRequestsConfiguration();
 
@@ -87,6 +92,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         // Feedback Context
         builder.ApplyFeedbackConfiguration();
+      
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();
     }

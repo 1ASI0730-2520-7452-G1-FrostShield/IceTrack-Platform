@@ -3,4 +3,5 @@
 /// <summary>
 ///     Represents the resource for a site.
 /// </summary>
-public record SiteResource(int Id, string Name, string Address);
+public record SiteResource(int Id, string Name, string Address, string ContactName, string Phone,
+    DateTimeOffset? Created, DateTimeOffset? Updated);

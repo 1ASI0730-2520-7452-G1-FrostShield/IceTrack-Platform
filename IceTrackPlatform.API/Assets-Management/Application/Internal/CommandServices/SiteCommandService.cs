@@ -9,17 +9,15 @@ namespace IceTrackPlatform.API.Assets_Management.Application.Internal.CommandSer
 /// <summary>
 /// This class handles commands related to Site entities.
 /// </summary>
-public class SiteCommandService(ISiteRepository siteRepository,
+/// <param name="siteRepository">The instance of SiteRepository</param>
+/// <param name="unitOfWork">The instance of UnitOfwork</param>
+public class SiteCommandService(ISiteRepository siteRepository, 
                                     IUnitOfWork unitOfWork)
     : ISiteCommandService
 {
     public async Task<Site?> Handle(CreateSiteCommand command)
     {
-        var site =
-            await siteRepository.FindByNameAndAddressAsync(command.Name, command.Address);
-        if (site != null)
-            throw new Exception("Site already exists.");
-        site = new Site(command);
+        var site = new Site(command);
         try
         {
             await siteRepository.AddAsync(site);
@@ -31,4 +29,23 @@ public class SiteCommandService(ISiteRepository siteRepository,
         }
         return site;
     }
+    
+    public async Task<bool> Handle(DeleteSiteCommand command)
+    {
+        var site = await siteRepository.FindByIdAsync(command.SiteId);
+        if (site is null) return false;
+        try
+        {
+            siteRepository.Remove(site);
+            await unitOfWork.CompleteAsync();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error deleting Site: {e.Message}");
+            return false;
+        }
+    }
+
+
 }

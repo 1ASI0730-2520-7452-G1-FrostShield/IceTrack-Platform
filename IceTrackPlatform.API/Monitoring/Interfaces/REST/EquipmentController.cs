@@ -1,0 +1,111 @@
+﻿using System.Net.Mime;
+using IceTrackPlatform.API.Monitoring.Domain.Model.Commands;
+using IceTrackPlatform.API.Monitoring.Domain.Model.Queries;
+using IceTrackPlatform.API.Monitoring.Domain.Services;
+using IceTrackPlatform.API.Monitoring.Interfaces.REST.Resources;
+using IceTrackPlatform.API.Monitoring.Interfaces.REST.Transform;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+
+namespace IceTrackPlatform.API.Monitoring.Interfaces.REST;
+
+/// <summary>
+///     Equipment REST API controller.
+/// </summary>
+/// <param name="equipmentCommandService">The Equipment Command Service</param>
+/// <param name="equipmentQueryServices">The Equipment Query Service</param>
+[ApiController]
+[Route("api/v1/[controller]")]
+[Produces(MediaTypeNames.Application.Json)]
+[Tags("Equipment")]
+public class EquipmentController(
+    IEquipmentCommandService equipmentCommandService,
+    IEquipmentQueryServices equipmentQueryServices)
+    : ControllerBase
+{
+    [HttpPost]
+    [SwaggerOperation(Summary = "Create a new Equipment", Description = "Create a new Equipment", OperationId = "CreateEquipment")]
+    [SwaggerResponse(201, "Created equipment", typeof(EquipmentResource))]
+    [SwaggerResponse(400, "The equipment was not created")]
+    [SwaggerResponse(409, "The equipment already exists")]
+    public async Task<IActionResult> CreateEquipment(
+        [FromBody] CreateEquipmentResource resource)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+        var createEquipmentCommand = CreateEquipmentCommandFromResourceAssembler.ToCommandFromResource(resource);
+        try
+        {
+            var result = await equipmentCommandService.Handle(createEquipmentCommand);
+            if (result is null) return BadRequest();
+            return CreatedAtAction(nameof(GetEquipmentById), new { id = result.Id },
+                EquipmentResourceFromEntityAssembler.ToResourceFromEntity(result));
+        }
+        catch (Exception e) when (e.Message.Contains("already exists"))
+        {
+            return Conflict("A equipment with the same properties already exists.");
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+    
+    [HttpGet("{id}")]
+    [SwaggerOperation(Summary = "Gets a Equipment by Id", Description = "Gets a Equipment for a given identifier", OperationId = "GetEquipmentById")]
+    [SwaggerResponse(200, "The equipment was found", typeof(EquipmentResource))]
+    public async Task<IActionResult> GetEquipmentById(int id)
+    {
+        var getEquipmentByIdQuery = new GetEquipmentByIdQuery(id);
+        var result = await equipmentQueryServices.Handle(getEquipmentByIdQuery);
+        if (result is null) return NotFound();
+        var resource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(result);
+        return Ok(resource);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetEquipmentFromQuery([FromQuery] string manufacturer, [FromQuery] bool online = false)
+    {
+        if (online)
+            return await GetEquipmentByManufacturerAndOnline(manufacturer, true);
+
+        return BadRequest("You must specify need online to use the filter.");
+    }
+
+    
+    private async Task<IActionResult> GetAllEquipmentByType(string type)
+    {
+        var getAllEquipmentByTypeQuery = new GetAllEquipmentByTypeQuery(type);
+        var results = await equipmentQueryServices.Handle(getAllEquipmentByTypeQuery);
+        var resources = results
+            .Select(EquipmentResourceFromEntityAssembler.ToResourceFromEntity)
+            .ToList();
+        return Ok(resources);
+    }
+    
+    private async Task<IActionResult> GetEquipmentByManufacturerAndOnline(string manufacturer, bool online)
+    {
+        var getEquipmentByManufacturerAndOnlineQuery = new GetEquipmentByManufacturerAndOnlineQuery(manufacturer, online);
+        var result = await equipmentQueryServices.Handle(getEquipmentByManufacturerAndOnlineQuery);
+        if (result is null) return NotFound();
+        var resource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(result);
+        return Ok(resource);
+    }
+    
+    [HttpDelete("{id:int}")]
+    [SwaggerOperation(
+        Summary = "Delete Equipment",
+        Description = "Deletes a site.",
+        OperationId = "DeleteEquipment")]
+    [SwaggerResponse(204, "Equipment deleted.")]
+    [SwaggerResponse(404, "Equipment not found.")]
+    public async Task<IActionResult> DeleteEquipment(int id)
+    {
+        var command = new DeleteEquipmentCommand(id);
+        var result = await equipmentCommandService.Handle(command);
+
+        if (!result)
+            return NotFound($"Equipment with ID {id} not found.");
+
+        return NoContent();
+    }
+}
