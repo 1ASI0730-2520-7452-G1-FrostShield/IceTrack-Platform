@@ -22,4 +22,9 @@ public class AlertQueryService(IAlertRepository alertRepository)
     {
         return await alertRepository.FindByIdAsync(query.Id);
     }
+    
+    public async Task<IEnumerable<Alert>> Handle(GetAllAlertsQuery query)
+    {
+        return await alertRepository.ListAsync();
+    }
 }
