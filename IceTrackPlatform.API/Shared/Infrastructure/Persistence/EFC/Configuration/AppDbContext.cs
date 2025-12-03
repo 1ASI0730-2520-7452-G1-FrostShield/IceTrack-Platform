@@ -1,7 +1,9 @@
+using IceTrackPlatform.API.Assets_Management.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Dashboard.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Feedback.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.IAM.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
+using IceTrackPlatform.API.Monitoring.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Reporting.Domain.Model.Aggregates;
 using IceTrackPlatform.API.ServiceRequests.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
