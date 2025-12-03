@@ -43,4 +43,10 @@ public interface IAlertQueryServices
     /// <param name="query"> The GetAlertByIdQuery query </param>
     /// <returns> The Alert if found; otherwise, null </returns>
     Task<Alert?> Handle(GetAlertByIdQuery query);
+    /// <summary>
+    /// Handle the GetAllAlertsQuery
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
+    Task<IEnumerable<Alert>> Handle(GetAllAlertsQuery query);
 }

@@ -119,10 +119,22 @@ public class AlertController(
 
         return Ok(resources);
     }
-    [HttpDelete("{id}")]
+    [HttpGet("all")]
+    [SwaggerOperation(Summary = "Gets all alerts", Description = "Get all alerts", OperationId = "GetAllAlerts")]
+    [SwaggerResponse(200, "The alerts were found", typeof(IEnumerable<AlertResource>))]
+    public async Task<IActionResult> GetAllAlerts()
+    {
+        var getAllReportsQuery = new GetAllAlertsQuery();
+        var reports = await alertQueryServices.Handle(getAllReportsQuery);
+
+        var resources = reports .Select(AlertResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(resources);
+    }
+    
+    [HttpPatch("{id}/acknowledge")]
     [SwaggerOperation(
-        Summary = "Acknowledge an Alert",
-        Description = "Marks an alert as acknowledged instead of deleting it",
+        Summary = "Acknowledges an Alert",
+        Description = "Marks an alert as acknowledged",
         OperationId = "AcknowledgeAlert")]
     [SwaggerResponse(200, "Alert acknowledged successfully", typeof(AlertResource))]
     [SwaggerResponse(404, "Alert not found")]
@@ -144,5 +156,17 @@ public class AlertController(
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
+    }
+    
+    [HttpDelete("{id}")]
+    [SwaggerOperation(Summary = "Delete a Alert", Description = "Delete a Alert", OperationId = "DeleteAlert")]
+    [SwaggerResponse(204, "Alert deleted")]
+    [SwaggerResponse(404, "Alert not found")]
+    public async Task<IActionResult> DeleteAlert(int id)
+    {
+        var deleteCommand = new DeleteAlertCommand(id);
+        var result = await alertCommandService.Handle(deleteCommand);
+        if (result is null) return NotFound();
+        return NoContent();
     }
 }

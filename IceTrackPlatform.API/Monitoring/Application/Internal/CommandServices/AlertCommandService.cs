@@ -3,6 +3,7 @@ using IceTrackPlatform.API.Monitoring.Domain.Model.Commands;
 using IceTrackPlatform.API.Monitoring.Domain.Repositories;
 using IceTrackPlatform.API.Monitoring.Domain.Services;
 using IceTrackPlatform.API.Shared.Domain.Repositories;
+using Mysqlx.Crud;
 
 namespace IceTrackPlatform.API.Monitoring.Application.Internal.CommandServices;
 
@@ -41,5 +42,18 @@ public class AlertCommandService(
         await unitOfWork.CompleteAsync();
 
         return alert;
+    }
+    
+    public async Task<Alert?> Handle(DeleteAlertCommand command)
+    {
+        var report = await alertRepository.FindByIdAsync(command.Id);
+
+        if (report == null)
+            throw new Exception("Report not found.");
+
+        alertRepository.Remove(report);
+        await unitOfWork.CompleteAsync();
+
+        return report;
     }
 }

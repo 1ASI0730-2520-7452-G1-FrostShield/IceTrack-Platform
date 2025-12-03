@@ -24,4 +24,6 @@ public interface IAlertCommandService
     /// <param name="command">The acknowledge alert command</param>
     /// <returns>The acknowledged alert if found; otherwise, null.</returns>
     Task<Alert?> Handle(AcknowledgeAlertCommand command);
+    
+    Task<Alert?> Handle(DeleteAlertCommand command);
 }
