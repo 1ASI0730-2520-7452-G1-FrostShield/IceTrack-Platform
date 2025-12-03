@@ -119,12 +119,12 @@ public class AlertController(
 
         return Ok(resources);
     }
-    [HttpDelete("{id}")]
+    [HttpPatch("{id}/acknowledge")]
     [SwaggerOperation(
-        Summary = "Deletes an Alert",
-        Description = "Deletes an alert from the list",
-        OperationId = "DeleteAlert")]
-    [SwaggerResponse(200, "Alert deleted successfully", typeof(AlertResource))]
+        Summary = "Acknowledges an Alert",
+        Description = "Marks an alert as acknowledged",
+        OperationId = "AcknowledgeAlert")]
+    [SwaggerResponse(200, "Alert acknowledged successfully", typeof(AlertResource))]
     [SwaggerResponse(404, "Alert not found")]
     [SwaggerResponse(500, "Internal server error")]
     public async Task<IActionResult> AcknowledgeAlert(int id)
