@@ -16,4 +16,20 @@ public interface IReportCommandService
     /// <param name="command"></param>
     /// <returns></returns>
     Task<Report?> Handle(CreateReportCommand command);
+    
+    /// <summary>
+    /// Handle the update report command
+    /// </summary>
+    /// <remarks>
+    /// This method processes the UpdateReportCommand to update an existing Report entity.
+    /// </remarks>
+    Task<Report?> Handle(UpdateReportCommand command);
+    
+    /// <summary>
+    /// Handle the delete report command
+    /// </summary>
+    /// <remarks>
+    /// This method processes the DeleteReportCommand to delete an existing Report entity.
+    /// </remarks>
+    Task<Report?> Handle(DeleteReportCommand command);
 }

@@ -1,4 +1,5 @@
 ﻿using IceTrackPlatform.API.IAM.Domain.Model.Aggregates;
+using IceTrackPlatform.API.IAM.Domain.Model.ValueObjects;
 using IceTrackPlatform.API.Shared.Domain.Repositories;
 
 namespace IceTrackPlatform.API.IAM.Domain.Repositories;
@@ -21,4 +22,7 @@ public interface IUserRepository : IBaseRepository<User>
     /// <param name="username">The username to check.</param>
     /// <returns><c>true</c> if a user with the given username exists; otherwise <c>false</c>.</returns>
     bool ExistsByUsername(string username);
+    
+    Task<IEnumerable<User>> FindByRoleAsync(Roles role);
+
 }

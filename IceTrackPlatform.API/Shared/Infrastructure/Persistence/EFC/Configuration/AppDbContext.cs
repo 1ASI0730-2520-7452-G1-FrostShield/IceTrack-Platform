@@ -1,7 +1,13 @@
+using IceTrackPlatform.API.Assets_Management.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using IceTrackPlatform.API.Dashboard.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using IceTrackPlatform.API.Feedback.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.IAM.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
+using IceTrackPlatform.API.Monitoring.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Reporting.Domain.Model.Aggregates;
+using IceTrackPlatform.API.ServiceRequests.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using IceTrackPlatform.API.Technicians.Infrastructure.Persistence.EFC.Configuration.Extensions;
 
 namespace IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 
@@ -27,6 +33,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
    /// <param name="builder">
    ///     The option builder for the database context
    /// </param>
+   /// 
    protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
         builder.AddCreatedUpdatedInterceptor();
@@ -42,6 +49,8 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
    /// <param name="builder">
    ///     The model builder for the database context
    /// </param>
+   ///
+   
    protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -50,11 +59,15 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // IAM Context
         builder.ApplyIamConfiguration();
         
+        // DASHBOARD Context
+        builder.ApplyDashboardConfiguration();
+
         // Create all entities configurations
         
         builder.Entity<Report>().HasKey(r => r.Id);
         builder.Entity<Report>().Property(r => r.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Report>().Property(r => r.TenantId).IsRequired();
+        builder.Entity<Report>().Property(r => r.Type).HasConversion<string>();
         builder.Entity<Report>().Property(r => r.EquipmentId).IsRequired();
         builder.Entity<Report>().Property(r => r.Status).HasConversion<string>().IsRequired();
         
@@ -64,10 +77,24 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Alert>().Property(a => a.EquipmentId).IsRequired();
         builder.Entity<Alert>().Property(a => a.SiteId).IsRequired();
         builder.Entity<Alert>().Property(a => a.Type).IsRequired();
-        builder.Entity<Alert>().Property(a => a.Date).IsRequired();
         builder.Entity<Alert>().Property(a => a.Status).HasConversion<string>().IsRequired();
         builder.Entity<Alert>().Property(a => a.Severity).HasConversion<string>().IsRequired();
+
+        // Assets Management Context
+        builder.ApplyAssetsManagementConfiguration();
         
+        // Monitoring Context
+        builder.ApplyMonitoringConfiguration();
+      
+        // ServiceRequests Context
+        builder.ApplyServiceRequestsConfiguration();
+
+        // Technicians Context
+        builder.ApplyTechniciansConfiguration();
+        
+        // Feedback Context
+        builder.ApplyFeedbackConfiguration();
+      
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();
     }

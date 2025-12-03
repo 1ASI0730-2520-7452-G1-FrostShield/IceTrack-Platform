@@ -5,7 +5,8 @@
 /// </summary>
 public enum EReportType
 {
-    InProgress,
-    Completed,
-    Failed
+    Inspection,
+    Maintenance,
+    Incident,
+    Audit
 }

@@ -39,4 +39,9 @@ public class UserQueryService(IUserRepository userRepository) : IUserQueryServic
     {
         return await userRepository.FindByUsernameAsync(query.Username);
     }
+    
+    public async Task<IEnumerable<User>> Handle(GetUserByRoleQuery query)
+    {
+        return await userRepository.FindByRoleAsync(query.Role);
+    }
 }

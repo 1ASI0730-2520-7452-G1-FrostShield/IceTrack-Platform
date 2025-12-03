@@ -1,4 +1,4 @@
-﻿using IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
+using IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
 using IceTrackPlatform.API.Monitoring.Interfaces.REST.Resources;
 
 namespace IceTrackPlatform.API.Monitoring.Interfaces.REST.Transform
@@ -17,7 +17,6 @@ namespace IceTrackPlatform.API.Monitoring.Interfaces.REST.Transform
                 entity.Type,
                 entity.Severity,
                 entity.Description,
-                entity.Date,
                 entity.Status
             );
     }
