@@ -46,14 +46,14 @@ public class AlertCommandService(
     
     public async Task<Alert?> Handle(DeleteAlertCommand command)
     {
-        var report = await alertRepository.FindByIdAsync(command.Id);
+        var alert = await alertRepository.FindByIdAsync(command.Id);
 
-        if (report == null)
-            throw new Exception("Report not found.");
+        if (alert == null)
+            throw new Exception("Alert not found.");
 
-        alertRepository.Remove(report);
+        alertRepository.Remove(alert);
         await unitOfWork.CompleteAsync();
 
-        return report;
+        return alert;
     }
 }
