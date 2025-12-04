@@ -62,4 +62,26 @@ public interface IDashboardConfigCommandService
     ///     The updated <see cref="DashboardConfig" /> or null if operation failed.
     /// </returns>
     Task<DashboardConfig?> Handle(ReorderCardsCommand command);
+
+    /// <summary>
+    ///     Handles the remove card from dashboard command.
+    /// </summary>
+    /// <param name="command">
+    ///     The <see cref="RemoveCardFromDashboardCommand" /> command.
+    /// </param>
+    /// <returns>
+    ///     The updated <see cref="DashboardConfig" /> or null if operation failed.
+    /// </returns>
+    Task<DashboardConfig?> Handle(RemoveCardFromDashboardCommand command);
+
+    /// <summary>
+    ///     Handles the update card visibility command.
+    /// </summary>
+    /// <param name="command">
+    ///     The <see cref="UpdateCardVisibilityCommand" /> command.
+    /// </param>
+    /// <returns>
+    ///     The updated <see cref="DashboardConfig" /> or null if operation failed.
+    /// </returns>
+    Task<DashboardConfig?> Handle(UpdateCardVisibilityCommand command);
 }

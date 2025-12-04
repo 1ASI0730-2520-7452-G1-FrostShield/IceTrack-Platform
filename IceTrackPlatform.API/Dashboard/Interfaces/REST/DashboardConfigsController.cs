@@ -38,9 +38,7 @@ public class DashboardConfigsController(
     {
         var query = new GetDashboardConfigByIdQuery(id);
         var result = await queryService.Handle(query);
-
         if (result is null) return NotFound();
-
         var resource = DashboardConfigResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resource);
     }
@@ -61,9 +59,7 @@ public class DashboardConfigsController(
     {
         var query = new GetDashboardConfigByUserIdQuery(userId);
         var result = await queryService.Handle(query);
-
         if (result is null) return NotFound();
-
         var resource = DashboardConfigResourceFromEntityAssembler.ToResourceFromEntity(result);
         return Ok(resource);
     }
@@ -90,12 +86,10 @@ public class DashboardConfigsController(
         try
         {
             var result = await commandService.Handle(command);
-
             if (result is null)
                 return BadRequest("Failed to create dashboard configuration.");
 
             var dashboardResource = DashboardConfigResourceFromEntityAssembler.ToResourceFromEntity(result);
-
             return CreatedAtAction(
                 nameof(GetDashboardConfigById),
                 new { id = result.Id },
@@ -130,7 +124,6 @@ public class DashboardConfigsController(
         try
         {
             var result = await commandService.Handle(command);
-
             if (result is null)
                 return NotFound($"Dashboard configuration with ID {id} not found.");
 
@@ -192,7 +185,6 @@ public class DashboardConfigsController(
         try
         {
             var result = await commandService.Handle(command);
-
             if (result is null)
                 return NotFound($"Dashboard configuration with ID {id} not found.");
 
@@ -202,6 +194,76 @@ public class DashboardConfigsController(
         catch (InvalidOperationException ex)
         {
             return BadRequest(ex.Message);
+        }
+    }
+
+    /// <summary>
+    ///     Removes a card from a dashboard.
+    /// </summary>
+    /// <param name="id">The dashboard configuration ID.</param>
+    /// <param name="cardId">The card ID to remove.</param>
+    /// <returns>No content if successful.</returns>
+    [HttpDelete("{id:int}/cards/{cardId:int}")]
+    [SwaggerOperation(
+        Summary = "Remove Card from Dashboard",
+        Description = "Removes a specific card from the dashboard configuration.",
+        OperationId = "RemoveCardFromDashboard")]
+    [SwaggerResponse(204, "Card removed successfully.")]
+    [SwaggerResponse(404, "Dashboard configuration or card not found.")]
+    public async Task<IActionResult> RemoveCardFromDashboard(int id, int cardId)
+    {
+        var command = new RemoveCardFromDashboardCommand(id, cardId);
+
+        try
+        {
+            var result = await commandService.Handle(command);
+            if (result is null)
+                return NotFound($"Dashboard configuration with ID {id} not found.");
+
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+    /// <summary>
+    ///     Updates the visibility of a card.
+    /// </summary>
+    /// <param name="id">The dashboard configuration ID.</param>
+    /// <param name="cardId">The card ID.</param>
+    /// <param name="resource">The update visibility resource.</param>
+    /// <returns>The updated dashboard configuration.</returns>
+    [HttpPatch("{id:int}/cards/{cardId:int}/visibility")]
+    [SwaggerOperation(
+        Summary = "Update Card Visibility",
+        Description = "Updates the visibility state of a specific card.",
+        OperationId = "UpdateCardVisibility")]
+    [SwaggerResponse(200, "Card visibility updated.", typeof(DashboardConfigResource))]
+    [SwaggerResponse(400, "Invalid request data.")]
+    [SwaggerResponse(404, "Dashboard configuration or card not found.")]
+    public async Task<IActionResult> UpdateCardVisibility(
+        int id,
+        int cardId,
+        [FromBody] UpdateCardVisibilityResource resource)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var command = new UpdateCardVisibilityCommand(id, cardId, resource.IsVisible);
+
+        try
+        {
+            var result = await commandService.Handle(command);
+            if (result is null)
+                return NotFound($"Dashboard configuration with ID {id} not found.");
+
+            var dashboardResource = DashboardConfigResourceFromEntityAssembler.ToResourceFromEntity(result);
+            return Ok(dashboardResource);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
         }
     }
 
@@ -219,7 +281,6 @@ public class DashboardConfigsController(
     {
         var query = new GetAvailableDashboardCardsQuery();
         var result = await queryService.Handle(query);
-
         var cardTypes = result.Select(ct => ct.ToString());
         return Ok(cardTypes);
     }
