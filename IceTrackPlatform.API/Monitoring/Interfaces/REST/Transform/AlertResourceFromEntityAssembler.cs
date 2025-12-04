@@ -17,7 +17,8 @@ namespace IceTrackPlatform.API.Monitoring.Interfaces.REST.Transform
                 entity.Type,
                 entity.Severity,
                 entity.Description,
-                entity.Status
+                entity.Status,
+                entity.CreatedAt
             );
     }
 }

@@ -79,56 +79,34 @@ public class AlertController(
     }
 
     [HttpGet]
-    [SwaggerOperation(Summary = "Gets all Alerts by TenantId and EquipmentId",
-        Description = "Gets all Alerts by TenantId and EquipmentId",
-        OperationId = "GetAllAlertsByTenantIdAndEquipmentId")]
-    [SwaggerResponse(200, "The Alert was found", typeof(AlertResource))]
-    public async Task<IActionResult> GetAlertsFromQuery(
-        [FromQuery] int? tenantId = null,
-        [FromQuery] int? equipmentId = null)
+    [SwaggerOperation(
+        Summary = "Gets all Alerts or by Tenant/Equipment",
+        Description = "Gets all Alerts if no query parameter is specified. Can filter by tenantId or equipmentId.",
+        OperationId = "GetAlerts")]
+    [SwaggerResponse(200, "The alerts were found", typeof(IEnumerable<AlertResource>))]
+    [SwaggerResponse(400, "Invalid query parameters")]
+    public async Task<IActionResult> GetAlerts([FromQuery] int? tenantId = null, [FromQuery] int? equipmentId = null)
     {
         if (tenantId.HasValue)
-            return await GetAllAlertsByTenantIdQuery(tenantId.Value);
-
+        {
+            var query = new GetAllAlertsByTenantIdQuery(tenantId.Value);
+            var results = await alertQueryServices.Handle(query);
+            var resources = results.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity).ToList();
+            return Ok(resources);
+        }
+        
         if (equipmentId.HasValue)
-            return await GetAllAlertsByEquipmentIdQuery(equipmentId.Value);
-
-        return BadRequest("Please specify either tenantId or equipmentId as query parameter.");
-    }
-
-    private async Task<IActionResult> GetAllAlertsByTenantIdQuery(int tenantId)
-    {
-        var query = new GetAllAlertsByTenantIdQuery(tenantId);
-        var results = await alertQueryServices.Handle(query);
-
-        var resources = results
-            .Select(AlertResourceFromEntityAssembler.ToResourceFromEntity)
-            .ToList();
-
-        return Ok(resources);
-    }
-
-    private async Task<IActionResult> GetAllAlertsByEquipmentIdQuery(int equipmentId)
-    {
-        var query = new GetAllAlertsByEquipmentIdQuery(equipmentId);
-        var results = await alertQueryServices.Handle(query);
-
-        var resources = results
-            .Select(AlertResourceFromEntityAssembler.ToResourceFromEntity)
-            .ToList();
-
-        return Ok(resources);
-    }
-    [HttpGet("all")]
-    [SwaggerOperation(Summary = "Gets all alerts", Description = "Get all alerts", OperationId = "GetAllAlerts")]
-    [SwaggerResponse(200, "The alerts were found", typeof(IEnumerable<AlertResource>))]
-    public async Task<IActionResult> GetAllAlerts()
-    {
-        var getAllReportsQuery = new GetAllAlertsQuery();
-        var reports = await alertQueryServices.Handle(getAllReportsQuery);
-
-        var resources = reports .Select(AlertResourceFromEntityAssembler.ToResourceFromEntity);
-        return Ok(resources);
+        {
+            var query = new GetAllAlertsByEquipmentIdQuery(equipmentId.Value);
+            var results = await alertQueryServices.Handle(query);
+            var resources = results.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity).ToList();
+            return Ok(resources);
+        }
+        
+        var getAllQuery = new GetAllAlertsQuery();
+        var allAlerts = await alertQueryServices.Handle(getAllQuery);
+        var allResources = allAlerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity).ToList();
+        return Ok(allResources);
     }
     
     [HttpPatch("{id}/acknowledge")]
