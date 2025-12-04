@@ -127,4 +127,48 @@ public class DashboardConfigCommandService(
             return null;
         }
     }
+
+    /// <inheritdoc />
+    public async Task<DashboardConfig?> Handle(RemoveCardFromDashboardCommand command)
+    {
+        var dashboardConfig = await dashboardConfigRepository.FindByIdAsync(command.DashboardConfigId);
+
+        if (dashboardConfig is null)
+            throw new InvalidOperationException($"Dashboard configuration with ID {command.DashboardConfigId} not found.");
+
+        try
+        {
+            dashboardConfig.RemoveCard(command.CardId);
+            dashboardConfigRepository.Update(dashboardConfig);
+            await unitOfWork.CompleteAsync();
+            return dashboardConfig;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error removing card from dashboard: {e.Message}");
+            return null;
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<DashboardConfig?> Handle(UpdateCardVisibilityCommand command)
+    {
+        var dashboardConfig = await dashboardConfigRepository.FindByIdAsync(command.DashboardConfigId);
+
+        if (dashboardConfig is null)
+            throw new InvalidOperationException($"Dashboard configuration with ID {command.DashboardConfigId} not found.");
+
+        try
+        {
+            dashboardConfig.UpdateCardVisibility(command.CardId, command.IsVisible);
+            dashboardConfigRepository.Update(dashboardConfig);
+            await unitOfWork.CompleteAsync();
+            return dashboardConfig;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error updating card visibility: {e.Message}");
+            return null;
+        }
+    }
 }
