@@ -13,5 +13,6 @@ public record AlertResource(
     string Type,
     EAlertSeverity Severity,
     string Description,
-    EAlertStatus Status
+    EAlertStatus Status,
+    DateTime CreatedAt
 );

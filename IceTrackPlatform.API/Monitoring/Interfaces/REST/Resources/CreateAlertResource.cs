@@ -13,6 +13,5 @@ public record CreateAlertResource(
     [Required] string Type,
     [Required] EAlertSeverity Severity,
     [Required] string Description,
-    [Required] DateTime Date,
     [Required] EAlertStatus Status
 );

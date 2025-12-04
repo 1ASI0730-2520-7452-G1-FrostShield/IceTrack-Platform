@@ -20,6 +20,9 @@ public partial class Alert
     
     public EAlertStatus Status { get; private set; }
     
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    
+    
     public Alert(
         int tenantId,
         int equipmentId,
@@ -27,7 +30,8 @@ public partial class Alert
         string type,
         EAlertSeverity severity,
         string description,
-        EAlertStatus status)
+        EAlertStatus status,
+        DateTime createdAt)
     {
         TenantId = tenantId;
         EquipmentId = equipmentId;
@@ -36,6 +40,7 @@ public partial class Alert
         Severity = severity;
         Description = description;
         Status = status;
+        CreatedAt = createdAt;
     }
     
     public Alert(CreateAlertCommand command)
