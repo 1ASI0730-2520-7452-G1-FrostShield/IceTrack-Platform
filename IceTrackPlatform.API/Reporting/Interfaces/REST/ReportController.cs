@@ -18,7 +18,7 @@ namespace IceTrackPlatform.API.Reporting.Interfaces.REST;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Report")]
-public class ReportController(
+public class ReportsController(
     IReportCommandService reportCommandService,
     IReportQueryServices reportQueryServices)
     : ControllerBase
@@ -66,7 +66,9 @@ public class ReportController(
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetReportFromQuery([FromQuery] int? tenantId = null, [FromQuery] int? equipmentId = null)
+    [SwaggerOperation(Summary = "Gets reports", Description = "Get all reports with or without filters by tenantId or equipmentId", OperationId = "GetReports")]
+    [SwaggerResponse(200, "The reports were found", typeof(IEnumerable<ReportResource>))]
+    public async Task<IActionResult> GetReports([FromQuery] int? tenantId = null, [FromQuery] int? equipmentId = null)
     {
         if (tenantId.HasValue)
             return await GetAllReportsByTenantIdQuery(tenantId.Value);
@@ -74,7 +76,7 @@ public class ReportController(
         if (equipmentId.HasValue)
             return await GetAllReportsByEquipmentQuery(equipmentId.Value);
 
-        return BadRequest("Please specify either tenantId or equipmentId as query parameter.");
+        return await GetAllReports();
     }
     
     private async Task<IActionResult> GetAllReportsByTenantIdQuery(int tenantId)
@@ -101,10 +103,7 @@ public class ReportController(
         return Ok(resources);
     }
     
-    [HttpGet("all")]
-    [SwaggerOperation(Summary = "Gets all reports", Description = "Get all reports", OperationId = "GetAllReports")]
-    [SwaggerResponse(200, "The reports were found", typeof(IEnumerable<ReportResource>))]
-    public async Task<IActionResult> GetAllReports()
+    private async Task<IActionResult> GetAllReports()
     {
         var getAllReportsQuery = new GetAllReportsQuery();
         var reports = await reportQueryServices.Handle(getAllReportsQuery);
