@@ -54,17 +54,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
    protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-         //Render config
-         foreach (var entityType in builder.Model.GetEntityTypes())
-        {
-            var dateProperties = entityType.GetProperties()
-                .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?));
-
-            foreach (var property in dateProperties)
-            {
-                property.SetColumnType("datetime");
-            }
-        }
+        
         // IAM Context
         builder.ApplyIamConfiguration();
       
