@@ -128,13 +128,6 @@ options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection"))
 
 var app = builder.Build();
 
-//Render
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
-}
-
 // Verify if the database exists and create it if it doesn't
 app.UseDatabaseCreationAssurance();
 
