@@ -68,16 +68,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // IAM Context
         builder.ApplyIamConfiguration();
       
-         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-    {
-        var dateProperties = entityType.GetProperties()
-            .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?));
-
-        foreach (var property in dateProperties)
-        {
-            property.SetColumnType("datetime");
-        }
-    }
         // DASHBOARD Context
         builder.ApplyDashboardConfiguration();
 
