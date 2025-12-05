@@ -1,5 +1,6 @@
 using IceTrackPlatform.API.Monitoring.Domain.Model.Commands;
 using IceTrackPlatform.API.Monitoring.Domain.Model.ValueObjects;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
 public partial class Alert
