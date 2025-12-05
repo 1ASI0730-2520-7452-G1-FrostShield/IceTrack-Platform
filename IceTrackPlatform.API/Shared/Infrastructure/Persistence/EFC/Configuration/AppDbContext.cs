@@ -55,16 +55,16 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(builder);
          //Render config
-         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-         {
-        var dateProperties = entityType.GetProperties()
-            .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?));
-
-        foreach (var property in dateProperties)
+         foreach (var entityType in builder.Model.GetEntityTypes())
         {
-            property.SetColumnType("datetime");
+            var dateProperties = entityType.GetProperties()
+                .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?));
+
+            foreach (var property in dateProperties)
+            {
+                property.SetColumnType("datetime");
+            }
         }
-    }
         // IAM Context
         builder.ApplyIamConfiguration();
       
