@@ -13,7 +13,7 @@ namespace IceTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configurati
 
 using EntityFrameworkCore.CreatedUpdatedDate.Extensions;
 using Microsoft.EntityFrameworkCore;
-
+using System.Linq;
 
 /// <summary>
 ///     Application database context for the Learning Center Platform
@@ -54,11 +54,30 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
    protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        
-        // IAM Context
+         //Render config
+         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+         {
+        var dateProperties = entityType.GetProperties()
+            .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?));
+
+        foreach (var property in dateProperties)
+        {
+            property.SetColumnType("datetime");
+        }
+    }
         // IAM Context
         builder.ApplyIamConfiguration();
-        
+      
+         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+    {
+        var dateProperties = entityType.GetProperties()
+            .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?));
+
+        foreach (var property in dateProperties)
+        {
+            property.SetColumnType("datetime");
+        }
+    }
         // DASHBOARD Context
         builder.ApplyDashboardConfiguration();
 
