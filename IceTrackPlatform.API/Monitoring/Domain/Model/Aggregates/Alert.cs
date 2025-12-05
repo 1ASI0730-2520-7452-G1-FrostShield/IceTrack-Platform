@@ -20,9 +20,9 @@ public partial class Alert
     
     public EAlertStatus Status { get; private set; }
     
+    [Column(TypeName = "datetime")]
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
-    
-    
+
     public Alert(
         int tenantId,
         int equipmentId,
