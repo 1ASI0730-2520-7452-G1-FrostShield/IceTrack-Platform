@@ -63,13 +63,17 @@ public class SiteController(
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAllFavoriteSourcesByContactName(string contactName)
+    [SwaggerOperation(Summary = "Get all sites", Description = "Gets the complete list of sites", OperationId = "GetAllSites")]
+    [SwaggerResponse(200, "List of sites", typeof(IEnumerable<SiteResource>))]
+    public async Task<IActionResult> GetAllSites()
     {
-        var getAllSitesByContactNameQuery = new GetAllSitesByContactNameQuery(contactName);
-        var results = await siteQueryServices.Handle(getAllSitesByContactNameQuery);
+        var query = new GetAllSitesQuery();
+        var results = await siteQueryServices.Handle(query);
+
         var resources = results
             .Select(SiteResourceFromEntityAssembler.ToResourceFromEntity)
             .ToList();
+
         return Ok(resources);
     }
     

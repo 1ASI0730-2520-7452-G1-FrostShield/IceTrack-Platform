@@ -16,13 +16,13 @@ namespace IceTrackPlatform.API.Assets_Management.Application.Internal.QueryServi
 public class SiteQueryService(ISiteRepository siteRepository)
     : ISiteQueryServices
 {
-    public async Task<IEnumerable<Site>> Handle(GetAllSitesByContactNameQuery query)
-    {
-        return await siteRepository.FindByContactNameAsync(query.ContactName);
-    }
-
     public async Task<Site?> Handle(GetSiteByIdQuery query)
     {
         return await siteRepository.FindByIdAsync(query.Id);
+    }
+    
+    public async Task<IEnumerable<Site>> Handle(GetAllSitesQuery query)
+    {
+        return await siteRepository.ListAsync();
     }
 }

@@ -16,18 +16,13 @@ namespace IceTrackPlatform.API.Monitoring.Application.Internal.QueryServices;
 public class EquipmentQueryService(IEquipmentRepository equipmentRepository)
     : IEquipmentQueryServices
 {
-    public async Task<IEnumerable<Equipment>> Handle(GetAllEquipmentByTypeQuery query)
-    {
-        return await equipmentRepository.FindByTypeAsync(query.Type);
-    }
-
-    public async Task<Equipment?> Handle(GetEquipmentByManufacturerAndOnlineQuery query)
-    {
-        return await equipmentRepository.FindByManufacturerAndOnlineAsync(query.Manufacturer, query.Online);
-    }
-
     public async Task<Equipment?> Handle(GetEquipmentByIdQuery query)
     {
         return await equipmentRepository.FindByIdAsync(query.Id);
+    }
+    
+    public async Task<IEnumerable<Equipment?>> Handle(GetAllEquipmentQuery query)
+    {
+        return await equipmentRepository.ListAsync();
     }
 }

@@ -63,32 +63,18 @@ public class EquipmentController(
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetEquipmentFromQuery([FromQuery] string manufacturer, [FromQuery] bool online = false)
+    [SwaggerOperation(Summary = "Get all equipments", Description = "Gets the complete list of equipments", OperationId = "GetAllEquipments")]
+    [SwaggerResponse(200, "List of equipments", typeof(IEnumerable<EquipmentResource>))]
+    public async Task<IActionResult> GetAllEquipments()
     {
-        if (online)
-            return await GetEquipmentByManufacturerAndOnline(manufacturer, true);
+        var query = new GetAllEquipmentQuery();
+        var results = await equipmentQueryServices.Handle(query);
 
-        return BadRequest("You must specify need online to use the filter.");
-    }
-
-    
-    private async Task<IActionResult> GetAllEquipmentByType(string type)
-    {
-        var getAllEquipmentByTypeQuery = new GetAllEquipmentByTypeQuery(type);
-        var results = await equipmentQueryServices.Handle(getAllEquipmentByTypeQuery);
         var resources = results
             .Select(EquipmentResourceFromEntityAssembler.ToResourceFromEntity)
             .ToList();
+
         return Ok(resources);
-    }
-    
-    private async Task<IActionResult> GetEquipmentByManufacturerAndOnline(string manufacturer, bool online)
-    {
-        var getEquipmentByManufacturerAndOnlineQuery = new GetEquipmentByManufacturerAndOnlineQuery(manufacturer, online);
-        var result = await equipmentQueryServices.Handle(getEquipmentByManufacturerAndOnlineQuery);
-        if (result is null) return NotFound();
-        var resource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(result);
-        return Ok(resource);
     }
     
     [HttpDelete("{id:int}")]

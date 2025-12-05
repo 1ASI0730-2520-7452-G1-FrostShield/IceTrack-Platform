@@ -1,8 +1,8 @@
 using IceTrackPlatform.API.Monitoring.Domain.Model.Commands;
 using IceTrackPlatform.API.Monitoring.Domain.Model.ValueObjects;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IceTrackPlatform.API.Monitoring.Domain.Model.Aggregates;
-
 public partial class Alert
 {
     public int Id { get; }
@@ -21,6 +21,7 @@ public partial class Alert
     
     public EAlertStatus Status { get; private set; }
     
+    [Column(TypeName = "datetime")]
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
     public Alert(

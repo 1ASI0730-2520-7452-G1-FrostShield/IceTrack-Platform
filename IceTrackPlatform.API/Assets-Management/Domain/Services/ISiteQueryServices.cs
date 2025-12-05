@@ -12,17 +12,6 @@ namespace IceTrackPlatform.API.Assets_Management.Domain.Services;
 public interface ISiteQueryServices
 {
     /// <summary>
-    ///     Handle the GetAllSitesByContactNameQuery
-    /// </summary>
-    /// <remarks>
-    ///     This method handles the GetAllSitesByContactNameQuery to retrieve all
-    ///     Site entities associated with a specific Contact Name.
-    /// </remarks>
-    /// <param name="query">The GetAllSitesByContactNameQuery query</param>
-    /// <returns>An IEnumerable containing the Site objects</returns>
-    Task<IEnumerable<Site>> Handle(GetAllSitesByContactNameQuery query);
-    
-    /// <summary>
     ///     Handle the GetSiteByIdQuery 
     /// </summary>
     /// <remarks>
@@ -34,4 +23,9 @@ public interface ISiteQueryServices
     ///     The Site if found; otherwise, null
     /// </returns>
     Task<Site?> Handle(GetSiteByIdQuery query);   
+    
+    /// <summary>
+    ///     Handle the GetAllSitesQuery 
+    /// </summary>
+    Task<IEnumerable<Site>> Handle(GetAllSitesQuery query);
 }
